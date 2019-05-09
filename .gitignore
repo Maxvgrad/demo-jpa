@@ -1,0 +1,20 @@
+*.log
+*.xml
+build/**
+out/**
+.gradle
+.idea
+gradle/**
+gradlew
+gradlew.bat
+/classes/**
+*.iml
+
+# ssl-key
+*.crt
+*.csr
+*.key
+*.p12
+
+# files
+login.properties
