@@ -18,3 +18,4 @@ gradlew.bat
 
 # files
 login.properties
+/logs/**
