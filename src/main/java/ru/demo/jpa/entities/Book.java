@@ -16,7 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Optional;
 
 @Entity

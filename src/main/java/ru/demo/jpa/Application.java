@@ -2,7 +2,7 @@ package ru.demo.jpa;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.demo.jpa.apps.ReactorApp;
+import ru.demo.jpa.apps.EntityManagerApp;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,7 +28,7 @@ public class Application {
         ExecutorService executorService = Executors.newCachedThreadPool();
         try {
 
-            Runnable taskApp = new ReactorApp(persistenceUnitName);
+            Runnable taskApp = new EntityManagerApp(persistenceUnitName);
 
             Future<?> result = executorService.submit(taskApp);
             int i = 0;

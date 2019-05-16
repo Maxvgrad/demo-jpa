@@ -22,7 +22,7 @@ import java.util.Collection;
 public class Pattern {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "parking_lot_seq", initialValue = 100, allocationSize = 1)
+    @SequenceGenerator(name = "seq", sequenceName = "pattern_id_seq", initialValue = 100, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
 

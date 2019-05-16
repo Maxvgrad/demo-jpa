@@ -26,7 +26,7 @@ import java.util.Collection;
 public class University {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "university_seq", initialValue = 100, allocationSize = 1)
+    @SequenceGenerator(name = "seq", sequenceName = "university_id_seq", initialValue = 100, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
 

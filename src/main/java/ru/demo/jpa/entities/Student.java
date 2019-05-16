@@ -26,7 +26,7 @@ import javax.persistence.SequenceGenerator;
 public class Student {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "student_seq", initialValue = 10, allocationSize = 1)
+    @SequenceGenerator(name = "seq", sequenceName = "student_id_seq", initialValue = 10, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
 

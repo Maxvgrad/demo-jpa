@@ -22,7 +22,7 @@ import java.util.Collection;
 public class Provider {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "parking_lot_seq", initialValue = 100, allocationSize = 1)
+    @SequenceGenerator(name = "seq", sequenceName = "provider_id_seq", initialValue = 100, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
 

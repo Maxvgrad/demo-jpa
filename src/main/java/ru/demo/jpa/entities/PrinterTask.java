@@ -2,6 +2,7 @@ package ru.demo.jpa.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,24 +12,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Getter
-@ToString(exclude = "owner")
-public class ParkingLot {
+@EqualsAndHashCode
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+public class PrinterTask {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "parking_lot_id_seq", initialValue = 100, allocationSize = 1)
+    @SequenceGenerator(name = "seq", sequenceName = "printer_task_id_seq", initialValue = 100, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
 
-    private Long lot;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Printer printer;
 
-    @OneToOne(mappedBy = "parkingLot", cascade = CascadeType.PERSIST)
-    private Student owner;
+    private String documentFormat;
 }

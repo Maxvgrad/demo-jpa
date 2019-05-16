@@ -13,7 +13,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 class StudentServiceTest {
 
@@ -23,7 +22,7 @@ class StudentServiceTest {
 
     @BeforeEach
     void setUpClass() {
-        emf = Persistence.createEntityManagerFactory("StudentService");
+        emf = Persistence.createEntityManagerFactory("demo");
         em = emf.createEntityManager();
         studentService = new StudentService(em);
         em.getTransaction().begin();
