@@ -14,16 +14,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 @Entity
-@Table(name = "acl_sid")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
-public class Role { // real table name is "acl_sid"
+public class Role {
 
     @Id
     @TableGenerator(name = "generator", table = "generators", pkColumnName = "gen_name", pkColumnValue = "role",

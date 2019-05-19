@@ -21,17 +21,19 @@ import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyEnumerated;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import java.util.Collection;
 import java.util.Map;
 
 @Entity
+@Table(name = "maintenance_employee")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
 @EqualsAndHashCode(exclude = {"nuclearPowerPlant", "phones"})
 @ToString(exclude = {"nuclearPowerPlant", "phones"})
-public class Employee {
+public class MaintenanceEmployee {
 
     @Id
     @SequenceGenerator(name = "seq", sequenceName = "reactor_id_seq", initialValue = 100, allocationSize = 1)
@@ -44,11 +46,11 @@ public class Employee {
     private Department department;
 
     @ElementCollection
-    @CollectionTable(name = "phone", joinColumns = @JoinColumn(name  = "employee_id"))
+    @CollectionTable(name = "m_phone", joinColumns = @JoinColumn(name  = "employee_id"))
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "phone_type")
     @Column(name = "phone_number")
-    private Map<Phone, String> phones;
+    private Map<PhoneType, String> phones;
 
     @ManyToMany()
     private Collection<NuclearPowerPlant> nuclearPowerPlant;

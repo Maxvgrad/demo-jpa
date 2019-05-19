@@ -3,9 +3,9 @@ package ru.demo.jpa.apps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.demo.jpa.entities.elementcollection.Department;
-import ru.demo.jpa.entities.elementcollection.Employee;
+import ru.demo.jpa.entities.elementcollection.MaintenanceEmployee;
 import ru.demo.jpa.entities.elementcollection.NuclearPowerPlant;
-import ru.demo.jpa.entities.elementcollection.Phone;
+import ru.demo.jpa.entities.elementcollection.PhoneType;
 import ru.demo.jpa.entities.elementcollection.Reactor;
 import ru.demo.jpa.entities.elementcollection.Tvs;
 import ru.demo.jpa.services.ReactorService;
@@ -93,17 +93,17 @@ public class ReactorApp implements Runnable {
 
             log.info("#run: test Employee phones mapping");
 
-            Employee employee = Employee.builder().name("Bob").phones(
+            MaintenanceEmployee employee = MaintenanceEmployee.builder().name("Bob").phones(
                     Map.of(
-                            Phone.WORK, "65",
-                            Phone.HOME, "66",
-                            Phone.MOBILE, "67"
+                            PhoneType.WORK, "65",
+                            PhoneType.HOME, "66",
+                            PhoneType.MOBILE, "67"
                            )
             ).build();
 
             em.persist(employee);
 
-            employee = em.find(Employee.class, employee.getId());
+            employee = em.find(MaintenanceEmployee.class, employee.getId());
             log.info("#run: {}", employee);
 
             em.getTransaction().commit();
@@ -117,9 +117,9 @@ public class ReactorApp implements Runnable {
 
             em.persist(nuclearPowerPlant);
 
-            List.of(Employee.builder().name("Jon").department(Department.CC).nuclearPowerPlant(Collections.singleton(nuclearPowerPlant)).build(),
-                    Employee.builder().name("Don").department(Department.RC).nuclearPowerPlant(Collections.singleton(nuclearPowerPlant)).build(),
-                    Employee.builder().name("Kim").department(Department.TC).nuclearPowerPlant(Collections.singleton(nuclearPowerPlant)).build())
+            List.of(MaintenanceEmployee.builder().name("Jon").department(Department.CC).nuclearPowerPlant(Collections.singleton(nuclearPowerPlant)).build(),
+                    MaintenanceEmployee.builder().name("Don").department(Department.RC).nuclearPowerPlant(Collections.singleton(nuclearPowerPlant)).build(),
+                    MaintenanceEmployee.builder().name("Kim").department(Department.TC).nuclearPowerPlant(Collections.singleton(nuclearPowerPlant)).build())
                 .forEach(em::persist);
 
             em.getTransaction().commit();

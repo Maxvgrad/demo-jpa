@@ -50,5 +50,5 @@ public class NuclearPowerPlant {
                inverseJoinColumns = @JoinColumn(name = "employee_id"))
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "department")
-    private Map<Department, Employee> employee;
+    private Map<Department, MaintenanceEmployee> employee;
 }

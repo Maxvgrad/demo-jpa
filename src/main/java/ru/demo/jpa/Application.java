@@ -2,7 +2,7 @@ package ru.demo.jpa;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.demo.jpa.apps.EntityManagerApp;
+import ru.demo.jpa.apps.QueryRunnerApp;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,19 +22,18 @@ public class Application {
 
     }
 
-
     private void execute() {
         log.info("#execute: persistence unit name={}", persistenceUnitName);
         ExecutorService executorService = Executors.newCachedThreadPool();
         try {
 
-            Runnable taskApp = new EntityManagerApp(persistenceUnitName);
+            Runnable taskApp = new QueryRunnerApp(persistenceUnitName);
 
             Future<?> result = executorService.submit(taskApp);
             int i = 0;
             while (!result.isDone()) {
                 TimeUnit.SECONDS.sleep(2);
-                log.info("#execute: time = {} s", i+=2);
+                //log.info("#execute: time = {} s", i+=2);
             }
             log.info("#execute: complete");
         } catch (Exception ex) {
@@ -45,9 +44,6 @@ public class Application {
                 executorService.shutdown();
             }
         }
-
-
-
     }
 
 }

@@ -2,33 +2,30 @@ package ru.demo.jpa.common;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import ru.demo.jpa.util.EntityManagerFactoryHolder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.Optional;
 
 public class BaseJpaTests {
 
     private String persistenceUnitName = "demo";
-    private EntityManagerFactory emf;
+    private EntityManagerFactoryHolder emfHolder;
     private EntityManager em;
     private boolean openTransaction = true;
 
     @BeforeEach
     protected void setUpClass() {
-        emf = Persistence.createEntityManagerFactory(persistenceUnitName);
-        em = emf.createEntityManager();
-        if (openTransaction) em.getTransaction().begin();
+        emfHolder = EntityManagerFactoryHolder.getInstance(persistenceUnitName);
+        em = emfHolder.createEntityManager();
+        if (openTransaction) {
+            begin();
+        }
     }
 
     @AfterEach
     protected void tearDown() {
-        Optional.ofNullable(em).ifPresent(eManager -> {
-            if (eManager.getTransaction().isActive()) eManager.getTransaction().commit();
-            if (eManager.isOpen()) eManager.close();
-        });
-        Optional.ofNullable(emf).ifPresent(emFactory -> { if (emFactory.isOpen()) emFactory.close(); });
+        emfHolder.close();
     }
 
     /**
@@ -47,6 +44,16 @@ public class BaseJpaTests {
     }
 
     public EntityManagerFactory getEntityManagerFactory() {
-        return emf;
+        return em.getEntityManagerFactory();
     }
+
+    public void commit() {
+        if (em.getTransaction().isActive()) em.getTransaction().commit();
+    }
+
+    public void begin() {
+        if (!em.getTransaction().isActive()) em.getTransaction().begin();
+    }
+
+
 }

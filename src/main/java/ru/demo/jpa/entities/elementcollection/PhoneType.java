@@ -1,5 +1,5 @@
 package ru.demo.jpa.entities.elementcollection;
 
-public enum Phone {
+public enum PhoneType {
     HOME, WORK, MOBILE
 }
