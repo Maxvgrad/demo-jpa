@@ -19,3 +19,5 @@ gradlew.bat
 # files
 login.properties
 /logs/**
+
+soccer.properties

@@ -1,4 +1,4 @@
-package ru.demo.jpa.services;
+package ru.demo.jpa.topics;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import ru.demo.jpa.common.BaseJpaTests;
 import ru.demo.jpa.dtos.SerialNumCurrencyHolder;
 import ru.demo.jpa.entities.Account;
+import ru.demo.jpa.entities.Dept;
 import ru.demo.jpa.entities.Employee;
 import ru.demo.jpa.entities.Passport;
 import ru.demo.jpa.entities.Phone;
@@ -31,6 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+
+/**
+ * Six possible clauses to be used in a select query: SELECT, FROM, WHERE, ORDER BY, GROUP BY and HAVING
+ *
+ */
 
 @Slf4j
 class JpqlTests extends BaseJpaTests {
@@ -290,6 +297,44 @@ class JpqlTests extends BaseJpaTests {
                 + "e.directs" // collection - value association
                 + "from Employee e";
 
+    }
+
+    @Test
+    void path_expression_chain_without_joins() {
+        // given
+        Employee manager = Employee.builder().name("manager").build();
+        Employee staff = Employee.builder().manager(manager).name("staff").build();
+        manager.getDirects().add(staff);
+        getEntityManager().persist(manager);
+        commit();
+
+        // when
+        List<String> result = getEntityManager()
+                .createQuery("select distinct e.manager.name from Employee e where e.manager is not null", String.class)
+                .getResultList();
+        // then
+        assertEquals(1, result.size());
+        assertEquals(manager.getName(), result.get(0));
+    }
+
+    @Test
+    void path_expression_chain_without_joins_on_different_table() {
+        // given
+        Dept dept = Dept.builder().name("R&D").build();
+        Employee manager = Employee.builder().name("manager").build();
+        Employee staff = Employee.builder().department(dept).manager(manager).name("staff").build();
+        manager.getDirects().add(staff);
+        getEntityManager().persist(manager);
+        commit();
+
+        // when
+        List<String> result = getEntityManager()
+                .createQuery("select distinct e.department.name from Employee e where e.manager is not null",
+                             String.class)
+                .getResultList();
+        // then
+        assertEquals(1, result.size());
+        assertEquals(dept.getName(), result.get(0));
     }
 
     @Test
@@ -798,12 +843,8 @@ class JpqlTests extends BaseJpaTests {
         assertTrue(employees.removeIf(e -> e.equals(employeeDrake) && e.getProjects().size() == 0));
     }
 
-
-
     private Account buildAccount(String currency) {
         return Account.builder().serialNumber("sn - " + Instant.now()).currency(currency).openDate(LocalDateTime.now())
                       .build();
     }
-
-
 }
