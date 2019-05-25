@@ -9,13 +9,13 @@ import javax.persistence.EntityManagerFactory;
 
 public class BaseJpaTests {
 
-    private String persistenceUnitName = "demo";
+    private static String persistenceUnitName = "demo";
     private EntityManagerFactoryHolder emfHolder;
     private EntityManager em;
     private boolean openTransaction = true;
 
     @BeforeEach
-    protected void setUpClass() {
+    protected void setUpInstance() {
         emfHolder = EntityManagerFactoryHolder.getInstance(persistenceUnitName);
         em = emfHolder.createEntityManager();
         if (openTransaction) {
@@ -35,8 +35,8 @@ public class BaseJpaTests {
         this.openTransaction = openTransaction;
     }
 
-    protected void setPersistenceUnitName(String persistenceUnitName) {
-        this.persistenceUnitName = persistenceUnitName;
+    protected static void setPersistenceUnitName(String persistenceUnitName) {
+        BaseJpaTests.persistenceUnitName = persistenceUnitName;
     }
 
     public EntityManager getEntityManager() {

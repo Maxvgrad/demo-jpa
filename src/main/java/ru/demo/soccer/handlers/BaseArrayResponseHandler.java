@@ -4,32 +4,39 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.ClientProtocolException;
-import ru.demo.soccer.dto.PlayerDto;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class PlayerRequestHandler extends BaseListRequestHandler<PlayerDto> {
+public class BaseArrayResponseHandler<T> extends BaseApiResponseHandler<List<T>> {
 
-    private final ObjectMapper objectMapper;
+    private final String dataArrNodeName;
+    private final Class<T> dataClass;
 
-    public PlayerRequestHandler(ObjectMapper objectMapper) {
+    public BaseArrayResponseHandler(String dataArrNodeName, Class<T> dataClass, ObjectMapper objectMapper) {
         super(objectMapper);
-        this.objectMapper = objectMapper;
+        this.dataArrNodeName = dataArrNodeName;
+        this.dataClass = dataClass;
     }
 
     @Override
-    protected List<PlayerDto> processEntities(JsonNode apiNode, int results) throws ClientProtocolException, IOException {
-        JsonNode resultsArr = apiNode.get("players");
+    protected List<T> processEntities(JsonNode apiNode) throws ClientProtocolException, IOException {
+
+        JsonNode resultsArr = apiNode.get(dataArrNodeName);
 
         if (!resultsArr.isArray()) {
             log.error("#processEntities: not an array");
             throw new IllegalStateException("Unexpected response!");
         }
 
-        List<PlayerDto> result = new ArrayList<>();
+        return process(resultsArr);
+    }
+
+    protected List<T> process(JsonNode resultsArr) throws IOException {
+
+        List<T> result = new ArrayList<>();
 
         for (int i = 0; i < resultsArr.size(); i++) {
 
@@ -40,9 +47,11 @@ public class PlayerRequestHandler extends BaseListRequestHandler<PlayerDto> {
                 continue;
             }
 
-            PlayerDto element = objectMapper.treeToValue(elementNode, PlayerDto.class);
+            T element = getObjectMapper().treeToValue(elementNode, dataClass);
             result.add(element);
         }
+
         return result;
     }
+
 }

@@ -1,6 +1,5 @@
 package ru.demo.soccer.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +26,6 @@ public class Sync {
     @Id
     @SequenceGenerator(name = "seq", sequenceName = "job_id_seq", initialValue = 10_000, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-    @JsonProperty("league_id")
     private Long id;
 
     @Column(nullable = false)

@@ -2,6 +2,7 @@ package ru.demo.soccer.handlers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
@@ -12,16 +13,16 @@ import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 
 import java.io.IOException;
-import java.util.List;
 
 @Slf4j
+@Getter
 @RequiredArgsConstructor
-public abstract class BaseListRequestHandler<T> implements ResponseHandler<List<T>> {
+public abstract class BaseApiResponseHandler<T> implements ResponseHandler<T> {
 
     private final ObjectMapper objectMapper;
 
     @Override
-    public List<T> handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+    public T handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
         StatusLine statusLine = response.getStatusLine();
         HttpEntity entity = response.getEntity();
         if (statusLine.getStatusCode() >= 300) {
@@ -46,16 +47,8 @@ public abstract class BaseListRequestHandler<T> implements ResponseHandler<List<
             throw new IllegalStateException();
         }
 
-        JsonNode resultsNode = apiNode.get("results");
-        int results;
-
-        if (resultsNode.isNull() || (results = resultsNode.intValue()) <= 0) {
-            log.error("#handleResponse: empty results");
-            throw new IllegalStateException("Results null");
-        }
-
-        return processEntities(apiNode, results);
+        return processEntities(apiNode);
     }
 
-    protected abstract List<T> processEntities(JsonNode apiNode, int results) throws ClientProtocolException, IOException;
+    protected abstract T processEntities(JsonNode apiNode) throws ClientProtocolException, IOException;
 }

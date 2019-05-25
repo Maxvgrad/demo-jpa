@@ -8,7 +8,6 @@ import org.apache.http.client.methods.HttpGet;
 import ru.demo.soccer.dto.PlayerDto;
 import ru.demo.soccer.entities.Sync;
 import ru.demo.soccer.entities.Team;
-import ru.demo.soccer.handlers.PlayerRequestHandler;
 import ru.demo.soccer.processor.PlayerProcessor;
 
 import javax.persistence.EntityManager;
@@ -25,7 +24,7 @@ public class PlayerSyncJob extends BaseSyncJob {
 
     private String url = "https://api-football-v1.p.rapidapi.com/v2/players/team/";
 
-    public PlayerSyncJob(EntityManager entityManager, HttpClient client, PlayerRequestHandler handler,
+    public PlayerSyncJob(EntityManager entityManager, HttpClient client, ResponseHandler<List<PlayerDto>> handler,
                          PlayerProcessor processor) {
         super(entityManager, "player_job", "last_reviewed_team_id");
         this.client = client;

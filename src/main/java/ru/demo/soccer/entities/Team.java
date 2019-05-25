@@ -27,7 +27,7 @@ public class Team {
     private Long id;
 
     /**
-     * www.api-football.com
+     * www api-football com
      */
     @Column(name = "api_football_com_team_id")
     private Long teamId;
