@@ -1,17 +1,18 @@
 package ru.demo.soccer.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity
@@ -19,27 +20,21 @@ import javax.persistence.SequenceGenerator;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Team {
+@EqualsAndHashCode(exclude = {"leagues", "venues"})
+@ToString(exclude = {"leagues", "venues"})
+public class Sync {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "team_id_name", allocationSize = 1, initialValue = 10_000)
+    @SequenceGenerator(name = "seq", sequenceName = "job_id_seq", initialValue = 10_000, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+    @JsonProperty("league_id")
     private Long id;
 
-    /**
-     * www.api-football.com
-     */
-    @Column(name = "api_football_com_team_id")
-    private Long teamId;
-
+    @Column(nullable = false)
     private String name;
 
-    private String code;
+    @Column(nullable = false)
+    private String key;
 
-    private String logo;
-
-    private Integer founded;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private League league;
+    private Long value;
 }

@@ -24,4 +24,8 @@ public class Season {
     @Column(name = "season_end")
     private Date seasonEnd;
 
+    @Column(name = "is_current")
+    private String current;
+
+    private String standings;
 }

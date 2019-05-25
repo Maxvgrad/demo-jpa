@@ -27,6 +27,12 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
 
+    /**
+     * www.api-football.com
+     */
+    @Column(name = "api_football_com_player_id")
+    private Long playerId;
+
     @Column(name = "player_name")
     private String playerName;
 
@@ -41,7 +47,7 @@ public class Player {
 
     private String position;
 
-    private Boolean captain;
+    private String captain;
 
     @Embedded
     private Statistics statistics;

@@ -1,13 +1,25 @@
 package ru.demo.soccer.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.time.Instant;
+import java.sql.Date;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@EqualsAndHashCode
+@ToString
 public class LeagueDto {
 
     @JsonProperty("league_id")
-    private Long leagueId;
+    private String leagueId;
 
     @JsonProperty("name")
     private String name;
@@ -19,13 +31,13 @@ public class LeagueDto {
     private String countryCode;
 
     @JsonProperty("season")
-    private String season;
+    private Integer season;
 
     @JsonProperty("season_start")
-    private Instant seasonStart;
+    private Date seasonStart;
 
     @JsonProperty("season_end")
-    private Instant seasonEnd;
+    private Date seasonEnd;
 
     @JsonProperty("logo")
     private String logo;
@@ -34,9 +46,9 @@ public class LeagueDto {
     private String flag;
 
     @JsonProperty("standings")
-    private Boolean standings;
+    private String standings;
 
-    @JsonProperty("isCurrent")
-    private Boolean isCurrent;
+    @JsonProperty("is_current")
+    private String current;
 
 }

@@ -10,20 +10,18 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
-import ru.demo.soccer.entities.League;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-public class LeagueHandler implements ResponseHandler<List<League>> {
+public abstract class BaseListRequestHandler<T> implements ResponseHandler<List<T>> {
 
     private final ObjectMapper objectMapper;
 
     @Override
-    public List<League> handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+    public List<T> handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
         StatusLine statusLine = response.getStatusLine();
         HttpEntity entity = response.getEntity();
         if (statusLine.getStatusCode() >= 300) {
@@ -56,23 +54,8 @@ public class LeagueHandler implements ResponseHandler<List<League>> {
             throw new IllegalStateException("Results null");
         }
 
-        JsonNode leaguesNode = apiNode.get("leagues");
-
-        List<League> result = new ArrayList<>();
-
-        for (int i = 1; i < results; i++) {
-
-            JsonNode leagueNode = leaguesNode.findValue("" + i);
-
-            if (leagueNode == null || leagueNode.isNull()) {
-                log.error("#handleResponse: league #{} null", i);
-                continue;
-            }
-
-            League league = objectMapper.treeToValue(leagueNode, League.class);
-            result.add(league);
-        }
-
-        return result;
+        return processEntities(apiNode, results);
     }
+
+    protected abstract List<T> processEntities(JsonNode apiNode, int results) throws ClientProtocolException, IOException;
 }

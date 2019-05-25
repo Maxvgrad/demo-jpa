@@ -23,8 +23,8 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "leagues")
-@ToString(exclude = "leagues")
+@EqualsAndHashCode(exclude = {"leagues", "venues"})
+@ToString(exclude = {"leagues", "venues"})
 public class Country {
 
     @Id
@@ -41,8 +41,10 @@ public class Country {
     private String flag;
 
     @OneToMany(mappedBy = "country")
+    @Builder.Default
     private Set<League> leagues = new HashSet<>();
 
     @OneToMany(mappedBy = "country")
+    @Builder.Default
     private Set<Venue> venues = new HashSet<>();
 }

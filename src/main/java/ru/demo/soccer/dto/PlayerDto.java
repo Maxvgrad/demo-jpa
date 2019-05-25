@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -30,11 +31,11 @@ public class PlayerDto {
 
     private String position;
 
-    private String injured;
+    private Boolean injured;
 
     private String rating;
 
-    private Integer captain;
+    private String captain;
 
     @JsonProperty("shots")
     private Shots shots;
@@ -69,100 +70,113 @@ public class PlayerDto {
     @JsonProperty("substitutes")
     private Substitutes substitutes;
 
-}
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class Substitutes {
-    private float in;
-    private float out;
-    private float bench;
-}
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class Substitutes {
+        private Integer in;
+        private Integer out;
+        private Integer bench;
+    }
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class Games {
-    private float appearences;
-    private float minutes_played;
-    private float lineups;
-}
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class Games {
+        private Integer appearences;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class Penalty {
-    private float success;
-    private float missed;
-    private float saved;
+        @JsonProperty("minutes_played")
+        private Integer minutesPlayed;
+        private Integer lineups;
+    }
 
-}
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Builder
+    public static class Penalty {
+        private Integer success;
+        private Integer missed;
+        private Integer saved;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class Cards {
-    private float yellow;
-    private float yellowred;
-    private float red;
-}
+    }
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class Fouls {
-    private float drawn;
-    private float committed;
-}
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class Cards {
+        private Integer yellow;
+        private Integer yellowred;
+        private Integer red;
+    }
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class Dribbles {
-    private float attempts;
-    private float success;
-}
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class Fouls {
+        private Integer drawn;
+        private Integer committed;
+    }
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class Duels {
-    private float total;
-    private float won;
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class Dribbles {
+        private Integer attempts;
+        private Integer success;
+    }
 
-}
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class Duels {
+        private Integer total;
+        private Integer won;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class Tackles {
-    private float total;
-    private float blocks;
-    private float interceptions;
-}
+    }
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class Passes {
-    private float total;
-    private float accuracy;
-}
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class Tackles {
+        private Integer total;
+        private Integer blocks;
+        private Integer interceptions;
+    }
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class Goals {
-    private float total;
-    private float conceded;
-    private float assists;
-}
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class Passes {
+        private Integer total;
+        private Integer accuracy;
+    }
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-class Shots {
-    private float total;
-    private float on;
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class Goals {
+        private Integer total;
+        private Integer conceded;
+        private Integer assists;
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class Shots {
+        private Integer total;
+        private Integer on;
+    }
 }

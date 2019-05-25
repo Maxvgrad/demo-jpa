@@ -12,7 +12,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -43,4 +46,8 @@ public class Venue {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Country country;
+
+    @OneToMany
+    @Builder.Default
+    private Set<Team> teams = new HashSet<>();
 }
