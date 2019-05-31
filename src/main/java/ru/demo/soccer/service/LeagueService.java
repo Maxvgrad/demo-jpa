@@ -1,18 +1,22 @@
 package ru.demo.soccer.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.demo.soccer.entities.League;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class LeagueService {
 
-    private final EntityManager entityManager;
+    @PersistenceContext(unitName = "soccer")
+    private EntityManager entityManager;
 
     /**
      * Get league by leagueId.

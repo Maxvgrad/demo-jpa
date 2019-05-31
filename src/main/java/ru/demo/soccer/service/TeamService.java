@@ -1,32 +1,44 @@
 package ru.demo.soccer.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.demo.soccer.entities.Team;
+import org.springframework.stereotype.Service;
+import ru.demo.soccer.entities.ApiTeam;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor
+@Service
+@AllArgsConstructor
+@NoArgsConstructor
 public class TeamService {
 
-    private final EntityManager entityManager;
+    @PersistenceContext(unitName = "soccer")
+    private EntityManager entityManager;
 
     /**
      * @param teamId - www.api-football.com
      */
-    public Team getByTeamId(Long teamId) {
-        return entityManager.createQuery("select t from Team t where t.teamId = :teamId", Team.class)
-                            .setParameter("teamId", teamId).getSingleResult();
+    public ApiTeam getByApiTeamId(Long teamId) {
+        return entityManager.createQuery("select t from ApiTeam t where t.apiId = :apiTeamId", ApiTeam.class)
+                            .setParameter("apiTeamId", teamId)
+                            .getSingleResult();
     }
 
-    public Optional<Team> findByTeamId(Long teamId) {
+    public Optional<ApiTeam> findByApiTeamId(Long apiTeamId) {
         try {
-            return Optional.ofNullable(getByTeamId(teamId));
+            return Optional.ofNullable(getByApiTeamId(apiTeamId));
         } catch (NoResultException | IllegalArgumentException ex) {
             return Optional.empty();
         }
+    }
+
+    public ApiTeam save(ApiTeam team) {
+        entityManager.persist(team);
+        return team;
     }
 }

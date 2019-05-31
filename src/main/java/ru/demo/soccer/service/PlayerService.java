@@ -1,12 +1,14 @@
 package ru.demo.soccer.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import ru.demo.soccer.dto.PlayerFilter;
 import ru.demo.soccer.entities.Player;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -14,10 +16,12 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlayerService {
 
-    private final EntityManager entityManager;
+    @PersistenceContext(unitName = "soccer")
+    private EntityManager entityManager;
 
     /**
      * Search for player

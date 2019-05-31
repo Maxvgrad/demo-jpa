@@ -17,88 +17,88 @@ public class Statistics {
 
     private String rating;
 
-    @Column(name = "shots_total")
+    @Column(name = "SHOTS_TOTAL")
     private Integer shotsTotal;
 
-    @Column(name = "shots_on")
+    @Column(name = "SHOTS_ON")
     private Integer shotsOn;
 
-    @Column(name = "goals_total")
+    @Column(name = "GOALS_TOTAL")
     private Integer goalsTotal;
 
-    @Column(name = "goals_conceded")
+    @Column(name = "GOALS_CONCEDED")
     private Integer goalsConceded;
 
-    @Column(name = "goals_assists")
+    @Column(name = "GOALS_ASSISTS")
     private Integer goalsAssists;
 
-    @Column(name = "passes_total")
+    @Column(name = "PASSES_TOTAL")
     private Integer passesTotal;
 
-    @Column(name = "passes_accuracy")
+    @Column(name = "PASSES_ACCURACY")
     private Integer passesAccuracy;
 
-    @Column(name = "tackles_total")
+    @Column(name = "TACKLES_TOTAL")
     private Integer tacklesTotal;
 
-    @Column(name = "tackles_blocks")
+    @Column(name = "TACKLES_BLOCKS")
     private Integer tacklesBlocks;
 
-    @Column(name = "tackles_interceptions")
+    @Column(name = "TACKLES_INTERCEPTIONS")
     private Integer tacklesInterceptions;
 
-    @Column(name = "duels_total")
+    @Column(name = "DUELS_TOTAL")
     private Integer duelsTotal;
 
-    @Column(name = "duels_won")
+    @Column(name = "DUELS_WON")
     private Integer duelsWon;
 
-    @Column(name = "dribbles_attempts")
+    @Column(name = "DRIBBLES_ATTEMPTS")
     private Integer dribblesAttempts;
 
-    @Column(name = "dribbles_success")
+    @Column(name = "DRIBBLES_SUCCESS")
     private Integer dribblesSuccess;
 
-    @Column(name = "fouls_drawn")
+    @Column(name = "FOULS_DRAWN")
     private Integer foulsDrawn;
 
-    @Column(name = "fouls_committed")
+    @Column(name = "FOULS_COMMITTED")
     private Integer foulsCommitted;
 
-    @Column(name = "cards_yellow")
+    @Column(name = "CARDS_YELLOW")
     private Integer cardsYellow;
 
-    @Column(name = "cards_yellowred")
+    @Column(name = "CARDS_YELLOWRED")
     private Integer cardsYellowred;
 
-    @Column(name = "cards_red")
+    @Column(name = "CARDS_RED")
     private Integer cardsRed;
 
-    @Column(name = "penalty_success")
+    @Column(name = "PENALTY_SUCCESS")
     private Integer penaltySuccess;
 
-    @Column(name = "penalty_missed")
+    @Column(name = "PENALTY_MISSED")
     private Integer penaltyMissed;
 
-    @Column(name = "penalty_saved")
+    @Column(name = "PENALTY_SAVED")
     private Integer penaltySaved;
 
-    @Column(name = "games_appearences")
+    @Column(name = "GAMES_APPEARENCES")
     private Integer gamesAppearences;
 
-    @Column(name = "games_minutes_played")
+    @Column(name = "GAMES_MINUTES_PLAYED")
     private Integer gamesMinutesPlayed;
 
-    @Column(name = "games_lineups")
+    @Column(name = "GAMES_LINEUPS")
     private Integer gamesLineups;
 
-    @Column(name = "substitutes_in")
+    @Column(name = "SUBSTITUTES_IN")
     private Integer substitutesIn;
 
-    @Column(name = "substitutes_out")
+    @Column(name = "SUBSTITUTES_OUT")
     private Integer substitutesOut;
 
-    @Column(name = "substitutes_bench")
+    @Column(name = "SUBSTITUTES_BENCH")
     private Integer substitutesBench;
 
 }

@@ -29,7 +29,8 @@ public class StandingJob extends BaseJob<List<StandingDto>> {
                        JobService service,
                        StandingProcessor processor,
                        LeagueService leagueService) {
-        super(client, handler, entityManager, service, "standing_job", "last_reviewed_league_id");
+        super(client, handler, //entityManager,
+              service, "standing_job", "last_reviewed_league_id");
         this.processor = processor;
         this.leagueService = leagueService;
     }

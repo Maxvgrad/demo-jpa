@@ -56,7 +56,8 @@ public class LeagueProcessor {
         Long leagueId = Long.valueOf(leagueDto.getLeagueId());
 
         League league = League.builder().leagueId(leagueId).name(leagueDto.getName()).country(country)
-                              .season(season).logo(leagueDto.getLogo()).build();
+                              //.season(season) // TODO
+                              .logo(leagueDto.getLogo()).build();
         country.getLeagues().add(league);
 
         entityManager.persist(league);

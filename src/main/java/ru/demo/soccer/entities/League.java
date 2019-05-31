@@ -10,7 +10,6 @@ import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,19 +25,20 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(exclude = "teams")
+@ToString(exclude = "teams")
 public class League {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "league_id_seq", initialValue = 10_000, allocationSize = 1)
+    @SequenceGenerator(name = "seq", sequenceName = "LEAGUE_ID_SEQ", initialValue = 10_000, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
 
     /**
      * www.api-football.com
      */
-    @Column(name = "api_football_com_league_id")
+    @Column(name = "API_FOOTBALL_COM_LEAGUE_ID")
+    @Deprecated
     private Long leagueId;
 
     private String name;
@@ -48,10 +48,7 @@ public class League {
 
     private String logo;
 
-    @Embedded
-    private Season season;
-
-    @OneToMany
+    @OneToMany(mappedBy = "league")
     @Builder.Default
-    private Set<Team> teams = new HashSet<>();
+    private Set<Season> season = new HashSet<>();
 }

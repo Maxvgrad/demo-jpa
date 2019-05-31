@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -24,6 +25,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = "employees")
 @ToString(exclude = "employees")
 @Builder
+@BatchSize(size = 4) // solve the N+1 selects problem
 public class Dept {
 
     @Id

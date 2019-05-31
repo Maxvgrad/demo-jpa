@@ -17,4 +17,6 @@ public class StandingFilter {
 
     private Date updateDate;
 
+    private String groupName;
+
 }

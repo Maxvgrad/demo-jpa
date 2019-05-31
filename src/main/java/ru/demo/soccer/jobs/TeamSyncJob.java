@@ -1,74 +1,58 @@
 package ru.demo.soccer.jobs;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.springframework.stereotype.Service;
 import ru.demo.soccer.dto.TeamDto;
-import ru.demo.soccer.entities.League;
+import ru.demo.soccer.entities.ApiLeague;
+import ru.demo.soccer.entities.Season;
 import ru.demo.soccer.entities.Sync;
 import ru.demo.soccer.processor.TeamProcessor;
+import ru.demo.soccer.service.JobService;
+import ru.demo.soccer.service.SeasonService;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import java.util.List;
 
 @Slf4j
-public class TeamSyncJob extends BaseSyncJob {
+@Service
+public class TeamSyncJob extends BaseJob<List<TeamDto>> {
 
-    private final HttpClient client;
-    private final EntityManager entityManager;
     private String url = "https://api-football-v1.p.rapidapi.com/v2/teams/league/";
-    private final ResponseHandler<List<TeamDto>> handler;
+
     private final TeamProcessor processor;
 
+    private final SeasonService seasonService;
 
-    public TeamSyncJob(EntityManager entityManager, HttpClient client, ResponseHandler<List<TeamDto>> handler, TeamProcessor process) {
-        super(entityManager, "team_job", "last_reviewed_league_id");
-        this.client = client;
-        this.entityManager = entityManager;
-        this.handler = handler;
-        this.processor = process;
+    private Season season;
+
+    public TeamSyncJob(HttpClient client,
+                       ResponseHandler<List<TeamDto>> handler,
+                       JobService service, TeamProcessor processor,
+                       SeasonService seasonService) {
+        super(client, handler, service, "team_job", "last_reviewed_league_id");
+
+        this.processor = processor;
+        this.seasonService = seasonService;
     }
 
-    public void process(Sync sync) {
+    @Override
+    protected HttpRequestBase retrieveRequest(Sync sync) {
 
-        sync.setValue(sync.getValue() + 1);
+        ApiLeague league = seasonService.findByApiLeagueId(sync.getValue()).orElseThrow(() -> {
+            log.error("#retrieveRequest: {}", sync);
+            return new IllegalArgumentException("API legua not found!");
+        });
 
-        League league;
-
-        try {
-            league = entityManager.createQuery("select l from League l where l.leagueId = :id", League.class)
-                                  .setParameter("id", sync.getValue())
-                                  .getSingleResult();
-        } catch (NoResultException ex) {
-            log.warn("#process: league(id:{}) not found", sync.getValue());
-            return;
-        }
-
-        HttpGet request = new HttpGet(url + league.getLeagueId());
-
-        try {
-
-            List<TeamDto> teams = client.execute(request, handler);
-
-            if (CollectionUtils.isEmpty(teams)) {
-                log.error("#process: teams not found");
-                throw new IllegalStateException("Teams not found!");
-            }
-
-            processor.process(teams, league);
-
-        } catch (Exception ex) {
-            log.error("#process: ex: {}", ex);
-            throw new IllegalStateException(ex);
-        }
-
-
-
-
-
-
+        this.season = league.getSeason();
+        return new HttpGet(url + league.getApiId());
     }
+
+    @Override
+    protected void process(List<TeamDto> data) {
+        processor.process(data, season);
+    }
+
 }

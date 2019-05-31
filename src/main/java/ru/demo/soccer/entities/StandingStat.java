@@ -3,20 +3,33 @@ package ru.demo.soccer.entities;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import ru.demo.soccer.entities.key.StandingStatId;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
 
-@Embeddable
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
+@EqualsAndHashCode(of = {"standing", "team"})
+@ToString(of = {"standing", "team"})
+@IdClass(StandingStatId.class)
 public class StandingStat {
 
-    @ManyToOne()
+    @Id
+    @ManyToOne
+    private Standing standing;
+
+    @Id
+    @ManyToOne
     private Team team;
 
     private Integer rank;
@@ -25,41 +38,41 @@ public class StandingStat {
 
     // home
 
-    @Column(name = "home_match_played")
+    @Column(name = "HOME_MATCH_PLAYED")
     private Integer homeMatchPlayed;
 
-    @Column(name = "home_win")
+    @Column(name = "HOME_WIN")
     private Integer homeWin;
 
-    @Column(name = "home_draw")
+    @Column(name = "HOME_DRAW")
     private Integer homeDraw;
 
-    @Column(name = "home_lose")
+    @Column(name = "HOME_LOSE")
     private Integer homeLose;
 
-    @Column(name = "home_goals_for")
+    @Column(name = "HOME_GOALS_FOR")
     private Integer homeGoalsFor;
 
-    @Column(name = "home_goals_against")
+    @Column(name = "HOME_GOALS_AGAINST")
     private Integer homeGoalsAgainst;
 
     // away
 
-    @Column(name = "away_match_played")
+    @Column(name = "AWAY_MATCH_PLAYED")
     private Integer awayMatchPlayed;
 
-    @Column(name = "away_win")
+    @Column(name = "AWAY_WIN")
     private Integer awayWin;
 
-    @Column(name = "away_draw")
+    @Column(name = "AWAY_DRAW")
     private Integer awayDraw;
 
-    @Column(name = "away_lose")
+    @Column(name = "AWAY_LOSE")
     private Integer awayLose;
 
-    @Column(name = "away_goals_for")
+    @Column(name = "AWAY_GOALS_FOR")
     private Integer awayGoalsFor;
 
-    @Column(name = "away_goals_against")
+    @Column(name = "AWAY_GOALS_AGAINST")
     private Integer awayGoalsAgainst;
 }

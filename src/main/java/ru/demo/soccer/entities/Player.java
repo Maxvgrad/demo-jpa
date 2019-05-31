@@ -23,17 +23,18 @@ import javax.persistence.SequenceGenerator;
 public class Player {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "player_id_seq", initialValue = 10_000, allocationSize = 1)
+    @SequenceGenerator(name = "seq", sequenceName = "PLAYER_ID_SEQ", initialValue = 10_000, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
 
     /**
      * www.api-football.com
      */
-    @Column(name = "api_football_com_player_id")
+    @Column(name = "API_FOOTBALL_COM_PLAYER_ID")
+    @Deprecated
     private Long playerId;
 
-    @Column(name = "player_name")
+    @Column(name = "PLAYER_NAME")
     private String playerName;
 
     @ManyToOne(cascade = CascadeType.PERSIST)

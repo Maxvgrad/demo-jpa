@@ -24,11 +24,11 @@ import javax.persistence.SequenceGenerator;
 public class Sync {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "job_id_seq", initialValue = 10_000, allocationSize = 1)
+    @SequenceGenerator(name = "seq", sequenceName = "JOB_ID_SEQ", initialValue = 10_000, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)

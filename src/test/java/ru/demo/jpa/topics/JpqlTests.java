@@ -2,18 +2,21 @@ package ru.demo.jpa.topics;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.hibernate.collection.internal.PersistentSet;
 import org.junit.jupiter.api.Test;
 import ru.demo.jpa.common.BaseJpaTests;
 import ru.demo.jpa.dtos.SerialNumCurrencyHolder;
 import ru.demo.jpa.entities.Account;
 import ru.demo.jpa.entities.Dept;
 import ru.demo.jpa.entities.Employee;
+import ru.demo.jpa.entities.EmployeeId;
 import ru.demo.jpa.entities.Passport;
 import ru.demo.jpa.entities.Phone;
 import ru.demo.jpa.entities.Project;
 import ru.demo.jpa.entities.elementcollection.PhoneType;
 import ru.demo.jpa.utils.VirtualCompany;
 
+import javax.persistence.EntityManager;
 import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -841,6 +844,87 @@ class JpqlTests extends BaseJpaTests {
         assertEquals(2, employees.size());
         assertTrue(employees.removeIf(e -> e.equals(employeeMarshall) && e.getProjects().size() == 1));
         assertTrue(employees.removeIf(e -> e.equals(employeeDrake) && e.getProjects().size() == 0));
+    }
+
+    @Test
+    void merge() {
+        // given
+        Employee employeeDrake = Employee.builder().id(3L).country("US").name("Drake").build();
+        getEntityManager().persist(employeeDrake);
+        commit();
+        getEntityManager().clear();
+        begin();
+        // when
+        Employee employee = getEntityManager().merge(employeeDrake);
+
+        // then
+        assertFalse(employee == employeeDrake);
+        assertTrue(employee.equals(employeeDrake));
+    }
+
+    @Test
+    void lazyFetchInTransactionPersistentSet() {
+        // given
+        Phone phone = Phone.builder().type(PhoneType.HOME).number("3232").build();
+        Phone phone2 = Phone.builder().type(PhoneType.HOME).number("3232").build();
+        Phone phone3 = Phone.builder().type(PhoneType.HOME).number("3232").build();
+        Employee employeeDrake = Employee.builder().id(3L).country("US").name("Drake").build();
+
+        phone.setEmployee(employeeDrake);
+        phone2.setEmployee(employeeDrake);
+        phone3.setEmployee(employeeDrake);
+        employeeDrake.getPhones().add(phone);
+        employeeDrake.getPhones().add(phone2);
+        employeeDrake.getPhones().add(phone3);
+
+        getEntityManager().persist(employeeDrake);
+        commit();
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        em.getTransaction().begin();
+        // when
+        Employee employee = em.find(Employee.class, new EmployeeId(employeeDrake.getId(), employeeDrake.getCountry()));
+        assertEquals(employee.getPhones().getClass(), PersistentSet.class);
+    }
+
+    @Test
+    void eagerFetch() {
+        // given
+        Project project = Project.builder().name("#").build();
+        Employee employeeDrake = Employee.builder().id(3L).country("US").name("Drake").build();
+
+        project.getEmployee().add(employeeDrake);
+        employeeDrake.getProjects().add(project);
+
+        getEntityManager().persist(employeeDrake);
+        commit();
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        em.getTransaction().begin();
+        // when
+        Employee employee = em.find(Employee.class, new EmployeeId(employeeDrake.getId(), employeeDrake.getCountry()));
+        assertEquals(employee.getProjects().getClass(), PersistentSet.class);
+    }
+
+    @Test
+    void lazyFetchWithoutTransactionPersistentSet() {
+        // given
+        Phone phone = Phone.builder().type(PhoneType.HOME).number("3232").build();
+        Phone phone2 = Phone.builder().type(PhoneType.HOME).number("3232").build();
+        Phone phone3 = Phone.builder().type(PhoneType.HOME).number("3232").build();
+        Employee employeeDrake = Employee.builder().id(3L).country("US").name("Drake").build();
+
+        phone.setEmployee(employeeDrake);
+        phone2.setEmployee(employeeDrake);
+        phone3.setEmployee(employeeDrake);
+        employeeDrake.getPhones().add(phone);
+        employeeDrake.getPhones().add(phone2);
+        employeeDrake.getPhones().add(phone3);
+
+        getEntityManager().persist(employeeDrake);
+        commit();
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        // when
+        Employee employee = em.find(Employee.class, new EmployeeId(employeeDrake.getId(), employeeDrake.getCountry()));
+        assertEquals(employee.getPhones().getClass(), PersistentSet.class);
     }
 
     private Account buildAccount(String currency) {

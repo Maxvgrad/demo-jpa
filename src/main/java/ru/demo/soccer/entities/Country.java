@@ -35,7 +35,7 @@ public class Country {
 
     private String country;
 
-    @Column(name = "country_code")
+    @Column(name = "COUNTRY_CODE")
     private String countryCode;
 
     private String flag;

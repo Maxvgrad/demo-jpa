@@ -25,23 +25,23 @@ import java.util.Set;
 public class Venue {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "venue_id_name", allocationSize = 1, initialValue = 10_000)
+    @SequenceGenerator(name = "seq", sequenceName = "VENUE_ID_NAME", allocationSize = 1, initialValue = 10_000)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
 
-    @Column(name = "venue_name")
+    @Column(name = "VENUE_NAME")
     private String venueName;
 
-    @Column(name = "venue_surface")
+    @Column(name = "VENUE_SURFACE")
     private String venueSurface;
 
-    @Column(name = "venue_address")
+    @Column(name = "VENUE_ADDRESS")
     private String venueAddress;
 
-    @Column(name = "venue_city")
+    @Column(name = "VENUE_CITY")
     private String venueCity;
 
-    @Column(name = "venue_capacity")
+    @Column(name = "VENUE_CAPACITY")
     private Long venueCapacity;
 
     @ManyToOne(cascade = CascadeType.PERSIST)

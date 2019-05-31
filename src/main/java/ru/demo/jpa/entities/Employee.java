@@ -10,15 +10,14 @@ import lombok.ToString;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,12 +28,16 @@ import java.util.Set;
 @Builder
 @EqualsAndHashCode(exclude = {"directs", "phones", "projects"})
 @ToString(exclude = {"directs", "phones", "projects"})
+@IdClass(EmployeeId.class)
 public class Employee {
 
     @Id
-    @SequenceGenerator(name = "seq", sequenceName = "employee_id_seq", initialValue = 100, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+    //@SequenceGenerator(name = "seq", sequenceName = "employee_id_seq", initialValue = 100, allocationSize = 1)
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
+
+    @Id
+    private String country;
 
     private String name;
 
@@ -51,14 +54,14 @@ public class Employee {
     @Builder.Default
     private Set<Phone> phones = new HashSet<>();
 
-    @ManyToMany(mappedBy = "employee", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "employee", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @Builder.Default
     private Set<Project> projects = new HashSet<>();
 
     @Embedded
     private Address address;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Dept department;
 
     @OneToOne(cascade = CascadeType.PERSIST)

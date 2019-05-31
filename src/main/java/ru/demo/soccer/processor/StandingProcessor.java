@@ -16,7 +16,6 @@ import ru.demo.soccer.service.TeamService;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,8 +43,13 @@ public class StandingProcessor {
         log.debug("#processInternal: {}", standingDto);
 
         List<Standing> standings = service
-                .search(StandingFilter.builder().leagueId(league.getLeagueId()).updateDate(standingDto.getLastUpdate())
+                .search(StandingFilter.builder()
+                                      .leagueId(league.getLeagueId())
+                                      .groupName(standingDto.getGroup())
+                                      .updateDate(standingDto.getLastUpdate())
                                       .build());
+
+        log.debug("#processInternal: standings ({})", standings);
 
         Standing standing;
 
@@ -61,14 +65,26 @@ public class StandingProcessor {
             standing = CollectionUtils.extractSingleton(standings);
         }
 
-        Optional<Team> team = teamService.findByTeamId(standingDto.getTeamId());
+//        Team team = teamService.findByApiTeamId(standingDto.getTeamId()).map(entityManager::merge).orElseGet(() -> {
+//            Team t = Team.builder().teamId(standingDto.getTeamId()).name(standingDto.getTeamName())
+//                         .checked(Boolean.FALSE).logo(standingDto.getLogo())
+//                         .league(league) TODO
+//                         .build();
+//            entityManager.persist(t);
+//            return t;
+//        });
+
+        Team team = null;
+
 
         StandingStat standingStat = standingStatMapper.standingDtoToStandingStat(standingDto);
-        standingStat.setTeam(team.orElse(null));
+        standingStat.setTeam(team);
+        standingStat.setStanding(standing);
 
         standing.getStandingStats().add(standingStat);
 
         entityManager.persist(standing);
+        entityManager.flush();
     }
 
 }

@@ -1,12 +1,15 @@
 package ru.demo.soccer.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import ru.demo.soccer.dto.StandingFilter;
 import ru.demo.soccer.entities.Standing;
 import ru.demo.soccer.entities.StandingStat;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -15,10 +18,12 @@ import java.util.List;
 import java.util.Set;
 
 @Slf4j
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class StandingService {
 
-    private final EntityManager entityManager;
+    @PersistenceContext(unitName = "soccer")
+    private EntityManager entityManager;
 
     public List<Standing> search(StandingFilter filter) {
 
@@ -37,7 +42,11 @@ public class StandingService {
             criteria = cb.and(criteria, cb.equal(standing.get("lastUpdate"), filter.getUpdateDate()));
         }
 
-        cq.select(standing).where(criteria);
+        if (StringUtils.isNotBlank(filter.getGroupName())) {
+            criteria = cb.and(criteria, cb.equal(standing.get("group"), filter.getGroupName()));
+        }
+
+        cq.select(standing).distinct(true).where(criteria);
 
         return entityManager.createQuery(cq).getResultList();
     }
