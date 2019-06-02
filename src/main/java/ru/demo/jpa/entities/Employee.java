@@ -16,6 +16,9 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.HashSet;
@@ -29,6 +32,17 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"directs", "phones", "projects"})
 @ToString(exclude = {"directs", "phones", "projects"})
 @IdClass(EmployeeId.class)
+@NamedEntityGraph(name = "Employee.partial",
+                  attributeNodes = {
+        @NamedAttributeNode(value = "id"),
+        @NamedAttributeNode(value = "country"),
+        @NamedAttributeNode(value = "department", subgraph = "dept"),
+                  },
+                  subgraphs = {
+        @NamedSubgraph(name = "dept", attributeNodes = {
+                @NamedAttributeNode(value = "name")
+        })
+})
 public class Employee {
 
     @Id

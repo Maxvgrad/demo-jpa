@@ -23,6 +23,7 @@ public abstract class JpaGenericDao<T, ID extends Serializable> implements Gener
         return t;
     }
 
+    @Transactional
     @Override
     public Optional<T> findById(ID id) {
         return Optional.ofNullable(this.entityManager.find(entityClass, id));

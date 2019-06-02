@@ -8,6 +8,7 @@ import ru.demo.jpa.entities.Delegation;
 import ru.demo.jpa.entities.Dept;
 import ru.demo.jpa.entities.Employee;
 import ru.demo.jpa.entities.EmployeeId;
+import ru.demo.jpa.entities.Monitor;
 import ru.demo.jpa.entities.inheritance.j.Department;
 import ru.demo.jpa.entities.inheritance.j.ForeignAffairs;
 import ru.demo.jpa.entities.inheritance.j.HomeLandSecurity;
@@ -15,10 +16,12 @@ import ru.demo.jpa.entities.inheritance.st.DomesticOrganisation;
 import ru.demo.jpa.entities.inheritance.st.ForeignOrganisation;
 import ru.demo.jpa.entities.inheritance.st.Organisation;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -201,4 +204,60 @@ class AdvancedQueryTest extends BaseJpaTests {
     void lob_value_moved_to_secondary_table() {
 
     }
+
+    // callback methods
+
+    @Test
+    void pre_persist_before_commit() {
+        // given
+        Monitor monitor = Monitor.builder().id(LocalDateTime.now()).build();
+        // when
+        getEntityManager().persist(monitor);
+        // then
+        assertFalse(monitor.getPersistDelata().isPresent());
+        assertFalse(monitor.getPostLoad().isPresent());
+        assertFalse(monitor.getUpdateDelata().isPresent());
+    }
+
+    @Test
+    void pre_persist_after_commit() {
+        // given
+        Monitor monitor = Monitor.builder().id(LocalDateTime.now()).build();
+        // when
+        getEntityManager().persist(monitor);
+        commit();
+        // then
+        assertTrue(monitor.getPersistDelata().isPresent());
+        assertFalse(monitor.getPostLoad().isPresent());
+        assertFalse(monitor.getUpdateDelata().isPresent());
+    }
+
+    @Test
+    void post_load() {
+        // given
+        Monitor monitor = Monitor.builder().id(LocalDateTime.now()).build();
+        getEntityManager().persist(monitor);
+        commit();
+        // when
+        Monitor fromDb = getEntityManagerFactory().createEntityManager().find(Monitor.class, monitor.getId());
+        // then
+        assertFalse(fromDb == monitor);
+        assertFalse(fromDb.getPersistDelata().isPresent());
+        assertTrue(fromDb.getPostLoad().isPresent());
+        assertFalse(fromDb.getUpdateDelata().isPresent());
+    }
+
+    @Test
+    void post_update() {
+        // given
+        Monitor monitor = Monitor.builder().id(LocalDateTime.now()).build();
+        getEntityManager().persist(monitor);
+        // when
+        monitor.setStatus("Updated");
+        commit();
+        // then
+        assertFalse(monitor.getPostLoad().isPresent());
+        assertTrue(monitor.getUpdateDelata().isPresent());
+    }
+
 }
