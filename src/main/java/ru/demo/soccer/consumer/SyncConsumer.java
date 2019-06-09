@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class SyncConsumer implements Consumer<Sync> {
 
-    private final GenericDao<Sync, String> syncRepository;
+    private final GenericDao<Sync, Long> syncRepository;
 
     @Override
     public void accept(Sync sync) {

@@ -16,6 +16,7 @@ public class Scheduler<T, R> implements Runnable {
     private final Consumer<R> dataConsumer;
     private final Consumer<T> syncConsumer;
 
+
     @Override
     public void run() {
         log.info("#run: start");

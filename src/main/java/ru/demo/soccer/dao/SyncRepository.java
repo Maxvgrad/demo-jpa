@@ -6,7 +6,7 @@ import ru.demo.soccer.entities.Sync;
 
 @Slf4j
 @Repository
-public class SyncRepository extends JpaGenericDao<Sync, Integer> {
+public class SyncRepository extends JpaGenericDao<Sync, Long> {
     public SyncRepository() {
         super(Sync.class);
     }

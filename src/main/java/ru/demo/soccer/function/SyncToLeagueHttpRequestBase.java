@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 @Slf4j
 @RequiredArgsConstructor
-public class SyncToHttpRequestBase implements Function<Sync, HttpRequestBase> {
+public class SyncToLeagueHttpRequestBase implements Function<Sync, HttpRequestBase> {
 
     private final SeasonService seasonService;
 
